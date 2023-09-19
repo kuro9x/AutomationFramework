@@ -10,7 +10,7 @@ namespace TestScript.Pages
 {
     public class GeneralPage
     {
-        public IWebDriver _driver => TestConfigs._driver;
+        public IWebDriver _driver => TestConfigs.InitDriver(ProjectCore.Drivers.DriverType.Chrome);
 
         public void OpenBrowserByUrl(string url)
         {

@@ -13,7 +13,7 @@ namespace ProjectCore.Drivers
         public IWebDriver CreateDriver()
         {
             var chromeOptions = new ChromeOptions();
-            var service = ChromeDriverService.CreateDefaultService(AppDomain.CurrentDomain.BaseDirectory);
+            var service = ChromeDriverService.CreateDefaultService();
 
             var driver = new ChromeDriver(service, chromeOptions);
 
