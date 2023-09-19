@@ -1,20 +1,12 @@
 ﻿using OpenQA.Selenium;
-using ProjectCore.Configurations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ProjectCore.POM.Pages;
 
 namespace TestScript.Pages
 {
-    public class GeneralPage
+    public class GeneralPage : APage
     {
-        public IWebDriver _driver => TestConfigs.InitDriver(ProjectCore.Drivers.DriverType.Chrome);
-
-        public void OpenBrowserByUrl(string url)
+        public GeneralPage(IWebDriver driver) : base(driver)
         {
-            _driver.Navigate().GoToUrl(url);
         }
     }
 }

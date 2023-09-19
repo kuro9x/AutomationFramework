@@ -3,13 +3,13 @@ using TestScript.Pages;
 
 namespace TestScript.TestCase
 {
-    public class HomePageTest
+    public class HomePageTest : TestBase
     {
         [Test]
         public void Scenario1()
         {
-            HomePage homePage = new HomePage();
-            homePage.OpenBrowserByUrl(Constant.APP_URL_HOME_PAGE);
+            HomePage homePage = new HomePage(this.Driver);
+            homePage.Open(this.Configurations.AppUrl);
         }
     }
 }

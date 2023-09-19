@@ -27,6 +27,7 @@
   <ItemGroup>
     <Folder Include="Database\" />
     <Folder Include="Loging\" />
+    <Folder Include="POM\PageElements\" />
     <Folder Include="Utilities\" />
     <Folder Include="Reports\" />
   </ItemGroup>

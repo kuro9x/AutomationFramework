@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenQA.Selenium;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,8 @@ namespace TestScript.Pages
 {
     public class HomePage : GeneralPage
     {
-        public HomePage()
+        public HomePage(IWebDriver driver) : base(driver)
         {
-
         }
     }
 }
