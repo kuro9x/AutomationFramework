@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<TestConfigurations>
+	<AppUrl>https://demoqa.com/</AppUrl> <!--https://demoqa.com/-->
+  <DriverType>Chrome</DriverType> <!--Chrome, Firefox, IE-->
+	<DefaultImplicitWaitTimeout>2000</DefaultImplicitWaitTimeout> <!--2000-->
+</TestConfigurations>

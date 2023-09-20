@@ -1,13 +1,9 @@
-﻿using NUnit.Framework;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using ProjectCore.Configurations;
+﻿using ProjectCore.Test;
 
 namespace TestScript.TestCase
 {
-    public class TestBase
+    public class TestBase : ATest
     {
-        public TestConfigs _configs = new TestConfigs();
-
+        protected override string TestConfigurationsFilePath => "./Configurations/DemoQATestConfigurations.xml";
     }
 }

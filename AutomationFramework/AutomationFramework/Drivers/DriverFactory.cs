@@ -2,9 +2,9 @@
 
 namespace ProjectCore.Drivers
 {
-    public class DriverFactory
+    public static class DriverFactory
     {
-        public IWebDriver? GetDriverProvider(DriverType driverType)
+        public static IWebDriver? GetDriverProvider(DriverType driverType)
         {
             IWebDriver? webDriver = null;
 
