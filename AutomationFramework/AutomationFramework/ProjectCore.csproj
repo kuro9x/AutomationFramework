@@ -22,6 +22,7 @@
     <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="Selenium.WebDriver" Version="4.12.4" />
     <PackageReference Include="System.Threading.Tasks" Version="4.0.11" />
+    <PackageReference Include="RestSharp.Serializers.NewtonsoftJson" Version = "110.2.0"/>
   </ItemGroup>
 
   <ItemGroup>
