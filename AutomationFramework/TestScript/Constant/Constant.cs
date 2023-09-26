@@ -1,4 +1,4 @@
-﻿namespace TestScript
+﻿namespace TestScript.Constant
 {
     public static class Constant
     {

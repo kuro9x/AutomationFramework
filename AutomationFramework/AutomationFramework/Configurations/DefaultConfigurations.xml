@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<TestConfigurations>
-	<AppUrl>input url here</AppUrl> <!--https://demoqa.com/-->
-  <DriverType>input enum here</DriverType> <!--Chrome, Firefox, IE-->
-	<DefaultImplicitWaitTimeout>input time as mili second here</DefaultImplicitWaitTimeout> <!--2000-->
-</TestConfigurations>

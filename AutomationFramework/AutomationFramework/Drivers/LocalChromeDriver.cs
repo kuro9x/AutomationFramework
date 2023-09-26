@@ -3,14 +3,14 @@ using OpenQA.Selenium.Chrome;
 
 namespace ProjectCore.Drivers
 {
-    public class ChromeDriverProvider : IDriver
+    public class LocalChromeDriver : IDriver
     {
-        public ChromeDriverProvider()
+        public LocalChromeDriver()
         {
 
         }
 
-        public IWebDriver CreateDriver()
+        public IWebDriver CreateDriver(DriverConfig config)
         {
             var chromeOptions = new ChromeOptions();
             var service = ChromeDriverService.CreateDefaultService();
@@ -22,7 +22,11 @@ namespace ProjectCore.Drivers
 
         public void KillDriver(IWebDriver driver)
         {
-            throw new NotImplementedException();
+            if (driver != null)
+            {
+                driver.Quit();
+                driver.Dispose();
+            }
         }
     }
 }
