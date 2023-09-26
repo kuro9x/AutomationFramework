@@ -8,96 +8,113 @@ using Newtonsoft.Json;
 
 namespace ProjectCore.API
 {
-    public class SendRequest
+    public class APIClient
     {
         private readonly RestClient _client;
 
         public RestRequest Request;
 
-        private RestClientOptions requestOption;
+        private RestClientOptions? requestOption;
 
-        public SendRequest(RestClient client, RestClientOptions requestOption)
+        public APIClient(RestClient client)
         {
             _client = client;
             Request = new RestRequest();
-            this.requestOption = requestOption;
         }
 
-        public SendRequest(string url, RestClientOptions requestOption)
+        public APIClient(string url)
         {
             RestClientOptions options = new RestClientOptions(url);
             _client = new RestClient(options, configureSerialization: s => s.UseNewtonsoftJson());
             Request = new RestRequest();
-            this.requestOption = requestOption;
         }
 
-        public SendRequest(RestClientOptions options, RestClientOptions requestOption)
+        public APIClient(RestClientOptions options)
         {
             _client = new RestClient(options, configureSerialization: s => s.UseNewtonsoftJson());
             Request = new RestRequest();
-            this.requestOption = requestOption;
         }
 
-        public SendRequest SetBasicAuthentication(string username, string password)
+        public APIClient SetBasicAuthentication(string username, string password)
         {
+            if (requestOption == null)
+            {
+                requestOption = new RestClientOptions();
+            }
             requestOption.Authenticator = new HttpBasicAuthenticator(username, password);
-            return new SendRequest(requestOption, requestOption);
+            return new APIClient(requestOption);
         }
 
-        public SendRequest SetAccessTokenAuthentication(string consumerKey, string consumerSecret, string oauthToken, string oauthtokenSecret)
+        public APIClient SetAccessTokenAuthentication(string consumerKey, string consumerSecret, string oauthToken, string oauthtokenSecret)
         {
+            if (requestOption == null)
+            {
+                requestOption = new RestClientOptions();
+            }
             requestOption.Authenticator = OAuth1Authenticator.ForAccessToken(consumerKey, consumerSecret, oauthToken, oauthtokenSecret);
-            return new SendRequest(requestOption, requestOption);
+            return new APIClient(requestOption);
         }
 
-        public SendRequest SetRequestHeaderAuthentication(string token, string authType = "Bearer")
+        public APIClient SetRequestHeaderAuthentication(string token, string authType = "Bearer")
         {
+            if (requestOption == null)
+            {
+                requestOption = new RestClientOptions();
+            }
             requestOption.Authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(token, authType);
-            return new SendRequest(requestOption, requestOption);
+            return new APIClient(requestOption);
         }
 
-        public SendRequest SetJwtAuthenticator(string token)
+        public APIClient SetJwtAuthenticator(string token)
         {
+            if (requestOption == null)
+            {
+                requestOption = new RestClientOptions();
+            }
             requestOption.Authenticator = new JwtAuthenticator(token);
-            return new SendRequest(requestOption, requestOption);
+            return new APIClient(requestOption);
         }
 
-        public SendRequest ClearAuthenticator()
+        public APIClient ClearAuthenticator()
         {
+            if (requestOption == null)
+            {
+                requestOption = new RestClientOptions();
+            }
             requestOption.Authenticator = null;
-            return new SendRequest(requestOption, requestOption);
+            return new APIClient(requestOption);
         }
 
-        public SendRequest AddDefaultHeaders(Dictionary<string, string> headers)
+        public APIClient AddDefaultHeaders(Dictionary<string, string> headers)
         {
             _client.AddDefaultHeaders(headers);
             return this;
         }
 
-        public SendRequest CreateRequest(string source = "")
+        public APIClient CreateRequest(string source = "")
         {
             Request = new RestRequest(source);
             return this;
         }
 
-        public SendRequest AddHeader(string name, string value)
+        public APIClient AddHeader(string name, string value)
         {
             Request.AddHeader(name, value);
             return this;
         }
 
-        public SendRequest AddAuthorizationHeader(string value)
+        public APIClient AddAuthorizationHeader(string value)
         {
             return AddHeader("Authorization", value);
         }
 
-        public SendRequest AddParameter(string name, string value)
+        public APIClient AddParameter(string name, string value)
         {
             Request.AddParameter(name, value);
             return this;
         }
 
-        public SendRequest AddBody(object obj, string? contentType = null)
+        public APIClient AddBody(object obj, string? contentType = null)
         {
             string json = JsonConvert.SerializeObject(obj);
             Request.AddStringBody(json, contentType ?? ContentType.Json);
