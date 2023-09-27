@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
+using ProjectCore.Drivers;
 
 namespace ProjectCore.WebElementProvider
 {
@@ -7,7 +8,7 @@ namespace ProjectCore.WebElementProvider
     {
         public static void HoverOnElement(By by)
         {
-            IWebDriver driver = WebDriverManager.GetDriver();
+            IWebDriver driver = WebDriverManager.GetCurrentDriver();
             IWebElement element = driver.FindElement(by);
             Actions actions = new Actions(driver);
             actions.MoveToElement(element).Build().Perform();
@@ -15,7 +16,7 @@ namespace ProjectCore.WebElementProvider
 
         public static void MoveTo(IWebElement element)
         {
-            IWebDriver driver = WebDriverManager.GetDriver();
+            IWebDriver driver = WebDriverManager.GetCurrentDriver();
             Actions actions = new Actions(driver);
             actions.MoveToElement(element).Build().Perform();
         }
@@ -24,7 +25,7 @@ namespace ProjectCore.WebElementProvider
         {
             try
             {
-                IWebDriver driver = WebDriverManager.GetDriver();
+                IWebDriver driver = WebDriverManager.GetCurrentDriver();
                 IWebElement ele = driver.FindElement(by);
                 return ele;
             }
@@ -40,7 +41,7 @@ namespace ProjectCore.WebElementProvider
             try
             {
                 WaitUtil.WaitForElementsVisible(by);
-                IReadOnlyCollection<IWebElement> collection = WebDriverManager.GetDriver().FindElements(by);
+                IReadOnlyCollection<IWebElement> collection = WebDriverManager.GetCurrentDriver().FindElements(by);
                 List<IWebElement> eles = new List<IWebElement>(collection);
                 return eles;
             }

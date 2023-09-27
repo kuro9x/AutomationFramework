@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using ProjectCore.Drivers;
 
 namespace ProjectCore.WebElementProvider
 {
@@ -7,7 +8,7 @@ namespace ProjectCore.WebElementProvider
     {
         public static WebDriverWait GetWait(int timeOutInSecond = 1)
         {
-            IWebDriver driver = WebDriverManager.GetDriver();
+            IWebDriver driver = WebDriverManager.GetCurrentDriver();
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeOutInSecond));
             return wait;
         }

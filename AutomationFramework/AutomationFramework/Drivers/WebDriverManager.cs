@@ -2,7 +2,7 @@
 
 namespace ProjectCore.Drivers
 {
-    public static class DriverManager
+    public static class WebDriverManager
     {
         private static AsyncLocal<WebDriver> Driver = new AsyncLocal<WebDriver>();
 
