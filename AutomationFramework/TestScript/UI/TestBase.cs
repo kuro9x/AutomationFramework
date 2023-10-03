@@ -5,6 +5,8 @@ using OpenQA.Selenium;
 using System.Reflection;
 using AventStack.ExtentReports.Reporter;
 using ProjectCore.Reports;
+using ProjectCore.Drivers;
+using TestScript.Configs;
 
 namespace TestScript.TestCase
 {
@@ -13,16 +15,27 @@ namespace TestScript.TestCase
         public static ExtentReports extent;
         public static ExtentTest testlog;
 
+        [SetUp]
+        public void BeforeTest()
+        {
+            DriverManager.InitDriverProvider(new DriverConfig
+            {
+                BrowserName = Application.GetConfig()["DriverConfig:BrowserName"],
+                Version = Application.GetConfig()["DriverConfig:Version"]
+            });
+        }
+
         [OneTimeSetUp]
         public void StartReport()
         {
             extent = ExtentManager.getExtentReports();
+            Application.Configure();
         }
 
         [OneTimeTearDown]
         public void EndReport()
         {
-            LoggingTestStatusExtentReport();
+            //LoggingTestStatusExtentReport();
             extent.Flush();
         }
 
@@ -38,7 +51,6 @@ namespace TestScript.TestCase
                 {
                     case TestStatus.Failed:
                         logstatus = Status.Fail;
-                        testlog.Log(Status.Fail, "Test steps NOT Completed for Test case " + TestContext.CurrentContext.Test.Name + " ");
                         testlog.Log(Status.Fail, "Test ended with " + Status.Fail + " – " + errorMessage);
                         break;
                     case TestStatus.Skipped:
@@ -47,7 +59,6 @@ namespace TestScript.TestCase
                         break;
                     default:
                         logstatus = Status.Pass;
-                        testlog.Log(Status.Pass, "Test steps finished for test case " + TestContext.CurrentContext.Test.Name);
                         testlog.Log(Status.Pass, "Test ended with " + Status.Pass);
                         break;
                 }

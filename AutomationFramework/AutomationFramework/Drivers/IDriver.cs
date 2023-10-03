@@ -4,8 +4,6 @@ namespace ProjectCore.Drivers
 {
     public interface IDriver
     {
-        IWebDriver CreateDriver(DriverConfig driverConfig);
-
-        void KillDriver(IWebDriver driver);
+        WebDriver CreateDriver(DriverConfig driverConfig);
     }
 }

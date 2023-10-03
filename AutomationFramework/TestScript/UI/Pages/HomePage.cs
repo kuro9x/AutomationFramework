@@ -1,11 +1,10 @@
 ﻿using OpenQA.Selenium;
+using ProjectCore.Drivers;
+using TestScript.UI.Pages;
 
 namespace TestScript.Pages
 {
-    public class HomePage : GeneralPage
+    public class HomePage : BasePage
     {
-        public HomePage(IWebDriver driver) : base(driver)
-        {
-        }
     }
 }

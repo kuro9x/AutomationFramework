@@ -11,21 +11,12 @@ namespace ProjectCore.Drivers
 
         }
 
-        public IWebDriver CreateDriver(DriverConfig config)
+        public WebDriver CreateDriver(DriverConfig config)
         {
             var chromeOptions = new ChromeOptions();
             var driver = new RemoteWebDriver(new Uri(config.RemoteUrl), chromeOptions.ToCapabilities(), TimeSpan.FromMinutes(1));
 
             return driver;
-        }
-
-        public void KillDriver(IWebDriver driver)
-        {
-            if (driver != null)
-            {
-                driver.Quit();
-                driver.Dispose();
-            }
         }
     }
 }

@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace ProjectCore.API
 {
-    public class SendRequest
+    public class APISendRequest
     {
         private readonly RestClient _client;
 
@@ -16,14 +16,14 @@ namespace ProjectCore.API
 
         private RestClientOptions requestOption;
 
-        public SendRequest(RestClient client, RestClientOptions requestOption)
+        public APISendRequest(RestClient client, RestClientOptions requestOption)
         {
             _client = client;
             Request = new RestRequest();
             this.requestOption = requestOption;
         }
 
-        public SendRequest(string url, RestClientOptions requestOption)
+        public APISendRequest(string url, RestClientOptions requestOption)
         {
             RestClientOptions options = new RestClientOptions(url);
             _client = new RestClient(options, configureSerialization: s => s.UseNewtonsoftJson());
@@ -31,73 +31,73 @@ namespace ProjectCore.API
             this.requestOption = requestOption;
         }
 
-        public SendRequest(RestClientOptions options, RestClientOptions requestOption)
+        public APISendRequest(RestClientOptions options, RestClientOptions requestOption)
         {
             _client = new RestClient(options, configureSerialization: s => s.UseNewtonsoftJson());
             Request = new RestRequest();
             this.requestOption = requestOption;
         }
 
-        public SendRequest SetBasicAuthentication(string username, string password)
+        public APISendRequest SetBasicAuthentication(string username, string password)
         {
             requestOption.Authenticator = new HttpBasicAuthenticator(username, password);
-            return new SendRequest(requestOption, requestOption);
+            return new APISendRequest(requestOption, requestOption);
         }
 
-        public SendRequest SetAccessTokenAuthentication(string consumerKey, string consumerSecret, string oauthToken, string oauthtokenSecret)
+        public APISendRequest SetAccessTokenAuthentication(string consumerKey, string consumerSecret, string oauthToken, string oauthtokenSecret)
         {
             requestOption.Authenticator = OAuth1Authenticator.ForAccessToken(consumerKey, consumerSecret, oauthToken, oauthtokenSecret);
-            return new SendRequest(requestOption, requestOption);
+            return new APISendRequest(requestOption, requestOption);
         }
 
-        public SendRequest SetRequestHeaderAuthentication(string token, string authType = "Bearer")
+        public APISendRequest SetRequestHeaderAuthentication(string token, string authType = "Bearer")
         {
             requestOption.Authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(token, authType);
-            return new SendRequest(requestOption, requestOption);
+            return new APISendRequest(requestOption, requestOption);
         }
 
-        public SendRequest SetJwtAuthenticator(string token)
+        public APISendRequest SetJwtAuthenticator(string token)
         {
             requestOption.Authenticator = new JwtAuthenticator(token);
-            return new SendRequest(requestOption, requestOption);
+            return new APISendRequest(requestOption, requestOption);
         }
 
-        public SendRequest ClearAuthenticator()
+        public APISendRequest ClearAuthenticator()
         {
             requestOption.Authenticator = null;
-            return new SendRequest(requestOption, requestOption);
+            return new APISendRequest(requestOption, requestOption);
         }
 
-        public SendRequest AddDefaultHeaders(Dictionary<string, string> headers)
+        public APISendRequest AddDefaultHeaders(Dictionary<string, string> headers)
         {
             _client.AddDefaultHeaders(headers);
             return this;
         }
 
-        public SendRequest CreateRequest(string source = "")
+        public APISendRequest CreateRequest(string source = "")
         {
             Request = new RestRequest(source);
             return this;
         }
 
-        public SendRequest AddHeader(string name, string value)
+        public APISendRequest AddHeader(string name, string value)
         {
             Request.AddHeader(name, value);
             return this;
         }
 
-        public SendRequest AddAuthorizationHeader(string value)
+        public APISendRequest AddAuthorizationHeader(string value)
         {
             return AddHeader("Authorization", value);
         }
 
-        public SendRequest AddParameter(string name, string value)
+        public APISendRequest AddParameter(string name, string value)
         {
             Request.AddParameter(name, value);
             return this;
         }
 
-        public SendRequest AddBody(object obj, string? contentType = null)
+        public APISendRequest AddBody(object obj, string? contentType = null)
         {
             string json = JsonConvert.SerializeObject(obj);
             Request.AddStringBody(json, contentType ?? ContentType.Json);

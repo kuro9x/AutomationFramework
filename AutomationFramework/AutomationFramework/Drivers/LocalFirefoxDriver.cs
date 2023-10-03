@@ -10,21 +10,12 @@ namespace ProjectCore.Drivers
 
         }
 
-        public IWebDriver CreateDriver(DriverConfig driverConfig)
+        public WebDriver CreateDriver(DriverConfig driverConfig)
         {
             var firefoxOption = new FirefoxOptions();
             var driver = new OpenQA.Selenium.Firefox.FirefoxDriver(firefoxOption);
 
             return driver;
-        }
-
-        public void KillDriver(IWebDriver driver)
-        {
-            if (driver != null)
-            {
-                driver.Quit();
-                driver.Dispose();
-            }
         }
     }
 }
