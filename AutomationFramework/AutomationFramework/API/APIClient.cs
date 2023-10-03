@@ -24,7 +24,7 @@ namespace ProjectCore.API
 
         public APIClient(string url)
         {
-            RestClientOptions options = new RestClientOptions(url);
+            RestClientOptions options = new (url);
             _client = new RestClient(options, configureSerialization: s => s.UseNewtonsoftJson());
             Request = new RestRequest();
         }
@@ -37,50 +37,35 @@ namespace ProjectCore.API
 
         public APIClient SetBasicAuthentication(string username, string password)
         {
-            if (requestOption == null)
-            {
-                requestOption = new RestClientOptions();
-            }
+            requestOption ??= new RestClientOptions();
             requestOption.Authenticator = new HttpBasicAuthenticator(username, password);
             return new APIClient(requestOption);
         }
 
         public APIClient SetAccessTokenAuthentication(string consumerKey, string consumerSecret, string oauthToken, string oauthtokenSecret)
         {
-            if (requestOption == null)
-            {
-                requestOption = new RestClientOptions();
-            }
+            requestOption ??= new RestClientOptions();
             requestOption.Authenticator = OAuth1Authenticator.ForAccessToken(consumerKey, consumerSecret, oauthToken, oauthtokenSecret);
             return new APIClient(requestOption);
         }
 
         public APIClient SetRequestHeaderAuthentication(string token, string authType = "Bearer")
         {
-            if (requestOption == null)
-            {
-                requestOption = new RestClientOptions();
-            }
+            requestOption ??= new RestClientOptions();
             requestOption.Authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(token, authType);
             return new APIClient(requestOption);
         }
 
         public APIClient SetJwtAuthenticator(string token)
         {
-            if (requestOption == null)
-            {
-                requestOption = new RestClientOptions();
-            }
+            requestOption ??= new RestClientOptions();
             requestOption.Authenticator = new JwtAuthenticator(token);
             return new APIClient(requestOption);
         }
 
         public APIClient ClearAuthenticator()
         {
-            if (requestOption == null)
-            {
-                requestOption = new RestClientOptions();
-            }
+            requestOption ??= new RestClientOptions();
             requestOption.Authenticator = null;
             return new APIClient(requestOption);
         }
@@ -163,5 +148,9 @@ namespace ProjectCore.API
             return await _client.ExecutePutAsync<T>(Request);
         }
 
+        internal object CreateRequest(object booksEndpoint)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
