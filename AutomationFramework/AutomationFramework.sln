@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectCore", "AutomationFramework\ProjectCore.csproj", "{A35A48D7-3A21-4CE6-864F-C3C911B653D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestScript", "TestScript\TestScript.csproj", "{02DBC8B7-4D10-47E8-8173-4FBCBE50A8B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnsplashTest", "TestScript\UnsplashTest.csproj", "{02DBC8B7-4D10-47E8-8173-4FBCBE50A8B1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppService", "AppService\AppService.csproj", "{75FA2F5B-39FA-452F-AF32-10E9E51947A2}"
 EndProject

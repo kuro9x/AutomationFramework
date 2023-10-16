@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using ProjectCore.Drivers;
-using RazorEngine.Compilation.ImpromptuInterface.Dynamic;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ProjectCore.WebElement
 {
@@ -30,8 +31,7 @@ namespace ProjectCore.WebElement
 
         public void Click()
         {
-            DriverManager.GetCurrentDriver().WaitForPageReady(this.timeout);
-            DriverManager.GetCurrentDriver().FindElementSafe(locator).Click();
+            DriverManager.GetCurrentDriver().Click(locator, timeout);
         }
 
         public void SendKeys(string text)
@@ -47,6 +47,16 @@ namespace ProjectCore.WebElement
         public void ClearData()
         {
             DriverManager.GetCurrentDriver().FindElementSafe(locator).Clear();
+        }
+
+        public IList<IWebElement> FindElementsSafe()
+        {
+            return DriverManager.GetCurrentDriver().FindElementsSafe(locator);
+        }
+
+        public bool IsElementVisible()
+        {
+            return DriverManager.GetCurrentDriver().IsElementVisible(locator);
         }
     }
 }

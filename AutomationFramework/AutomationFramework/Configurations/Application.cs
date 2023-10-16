@@ -1,25 +1,41 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System.Reflection;
 
 namespace ProjectCore.Configurations
 {
     public class Application
     {
-        private static IConfigurationRoot config =  null;
+        private static IConfiguration Configuration = null;
 
-        public static IConfigurationRoot Configure()
+
+        public static IConfiguration Configure()
         {
-            IConfigurationBuilder builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile($"appsettings.json", optional: true)
-                .AddEnvironmentVariables();
+            var builder = new ConfigurationBuilder()
+                  .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
+                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                  .AddEnvironmentVariables();
 
-            config = builder.Build();
-            return config;
+            Configuration = builder.Build();
+            return Configuration;
         }
 
-        public static IConfigurationRoot GetConfig()
+        public static IConfiguration GetConfig()
         {
-            return config;
+            return Configuration;
+        }
+
+        public static dynamic GetTestUsers()
+        {
+            var testUsers = Configuration.GetSection("TestUsers")
+                            .GetChildren()
+                            .ToList()
+                            .Select(x => new {
+                                UserName = x.GetValue<string>("UserName"),
+                                Email = x.GetValue<string>("Email"),
+                                Password = x.GetValue<string>("Password")
+                            });
+
+            return new { Data = testUsers };
         }
     }
 }

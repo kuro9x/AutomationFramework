@@ -1,9 +1,9 @@
 ﻿using OpenQA.Selenium;
 using ProjectCore.WebElement;
-using TestScript.Models;
-using TestScript.Pages;
+using UnsplashTest.Models;
+using UnsplashTest.Pages;
 
-namespace TestScript.UI.Pages
+namespace UnsplashTest.UI.Pages
 {
     public class LoginPage : HomePage
     {
@@ -11,8 +11,7 @@ namespace TestScript.UI.Pages
         private Element userPasswordTextBox = new Element(By.Id("user_password"));
         private Element loginButton = new Element(By.XPath("//input[@value='Login']"));
 
-
-        public void Login(Account account)
+        public void Login(AccountModel account)
         {
             userNameTextBox.SendKeys(account.Email);
             userPasswordTextBox.SendKeys(account.Password);

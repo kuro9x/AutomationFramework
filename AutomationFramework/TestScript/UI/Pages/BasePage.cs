@@ -1,12 +1,7 @@
 ﻿using OpenQA.Selenium;
 using ProjectCore.Drivers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace TestScript.UI.Pages
+namespace UnsplashTest.UI.Pages
 {
     public class BasePage
     {

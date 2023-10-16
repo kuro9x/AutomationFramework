@@ -17,8 +17,8 @@ namespace ProjectCore.Drivers
                     case "Chrome":
                         webDriver = new RemoteChromeDriver().CreateDriver(driverConfig);
                         break;
-                    case "Firefox":
-                        webDriver = new RemotelFirefoxDriver().CreateDriver(driverConfig);
+                    case "Edge":
+                        webDriver = new RemoteEdgeDriver().CreateDriver(driverConfig);
                         break;
                 }
             }
@@ -28,8 +28,8 @@ namespace ProjectCore.Drivers
                 case "Chrome":
                     webDriver = new LocalChromeDriver().CreateDriver(driverConfig);
                     break;
-                case "Firefox":
-                    webDriver =  new LocalFirefoxDriver().CreateDriver(driverConfig);
+                case "Edge":
+                    webDriver =  new LocalEdgeDriver().CreateDriver(driverConfig);
                     break;
             }
 
@@ -42,12 +42,12 @@ namespace ProjectCore.Drivers
             return driver.Value;
         }
 
-        public static void KillDriver(IWebDriver driver)
+        public static void QuitDriver()
         {
-            if (driver != null)
+            if (driver.Value != null)
             {
-                driver.Quit();
-                driver.Dispose();
+                driver.Value.Quit();
+                driver.Value.Dispose();
             }
         }
     }
