@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectCore", "AutomationFr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnsplashTest", "TestScript\UnsplashTest.csproj", "{02DBC8B7-4D10-47E8-8173-4FBCBE50A8B1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppService", "AppService\AppService.csproj", "{75FA2F5B-39FA-452F-AF32-10E9E51947A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnslashService", "AppService\UnslashService.csproj", "{75FA2F5B-39FA-452F-AF32-10E9E51947A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

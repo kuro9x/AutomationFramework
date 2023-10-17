@@ -1,21 +1,12 @@
-﻿using OpenQA.Selenium;
-using ProjectCore.Drivers;
+﻿using ProjectCore.Drivers;
 using ProjectCore.WebElement;
+using UnsplashTest.Constant;
 using UnsplashTest.Pages;
 
 namespace UnsplashTest.UI.Pages
 {
     public class LikesPage: HomePage
     {
-        private readonly Element navToLikeTab = new Element(By.XPath($"//a[@data-test='user-nav-link-likes']"));
-
-        public void GoTolikedTab()
-        {
-            ShowLoggedinMenu();
-            ViewProfile();
-            navToLikeTab.Click();
-        }
-
         public bool VerifyUnlikeProcess(List<string> photoNames)
         {
             try
@@ -38,6 +29,20 @@ namespace UnsplashTest.UI.Pages
             {
                 Console.WriteLine(ex.Message);
                 return false;
+            }
+        }
+
+        public void ProcessUnlikePhotos(List<string> likedPhotos)
+        {
+            foreach (var photoName in likedPhotos)
+            {
+                ElementByPhotoName(photoName).Click();
+                ElementPhotoActionButton(ActionButton.Like).Click();
+
+                if (buttonInDialog.IsElementVisible())
+                {
+                    CloseDialogPhoto();
+                }
             }
         }
     }

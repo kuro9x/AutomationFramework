@@ -15,7 +15,7 @@ namespace ProjectCore.Drivers
         public WebDriver CreateDriver(DriverConfig config)
         {
             string downloadedPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "downloaded");
-            string driverExecutableFileName = new WebDriverManager.DriverManager().SetUpDriver(new ChromeConfig()); // dynamic version
+            string driverExecutableFileName = new WebDriverManager.DriverManager().SetUpDriver(new ChromeConfig(), config.Version);
             string driverPath = Directory.GetParent(driverExecutableFileName).FullName;
 
             var chromeOptions = new ChromeOptions();

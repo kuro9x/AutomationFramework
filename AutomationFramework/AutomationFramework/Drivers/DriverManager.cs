@@ -58,5 +58,6 @@ namespace ProjectCore.Drivers
         public string DriverMode { get; set; }
         public string Version { get; set; }
         public string RemoteUrl { get; set; }
+        public string BinaryLocation { get; set; }
     }
 }

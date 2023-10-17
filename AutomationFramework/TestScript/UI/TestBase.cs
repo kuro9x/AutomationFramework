@@ -1,15 +1,13 @@
-﻿using AppService.Models;
+﻿using AppService.Services;
 using AventStack.ExtentReports;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using ProjectCore.Configurations;
 using ProjectCore.Drivers;
 using ProjectCore.Reports.ExtentReport;
-using RestSharp;
-using UnsplashTest.Models;
+using ProjectCore.Service;
 using UnsplashTest.Pages;
-using UnsplashTest.UI.Pages;
+using ProjectCore.Helpper;
 
 namespace UnsplashTest.TestCase
 {
@@ -17,35 +15,31 @@ namespace UnsplashTest.TestCase
     public class TestBase
     {
         protected static HomePage homePage = new HomePage();
-        protected static LoginPage loginPage = new LoginPage();
-        protected static LikesPage likesPage = new LikesPage();
-        protected static CollectionsPage collectionsPage = new CollectionsPage();
-        
+        protected PhotoService photoService;
+        protected CollectionService collectionService ;
 
         [SetUp]
         public void BeforeTest()
         {
-            var data = Application.GetTestUsers();
-            SetUpAccountData();
-            DriverManager.InitDriverProvider(new DriverConfig
-            {
-                BrowserName = Application.GetConfig()["DriverConfig:BrowserName"],
-                Version = Application.GetConfig()["DriverConfig:Version"]
-            });
+            SetUpBrowser();
 
             ExtentTestManager.CreateTest(TestContext.CurrentContext.Test.Name);
+            photoService = new PhotoService(new ApiClient(new RestSharp.RestClient()));
+            collectionService = new CollectionService(new ApiClient(new RestSharp.RestClient()));
         }
 
         [OneTimeSetUp]
         public void SetUp()
         {
             Application.Configure();
+            DataStorage.DataStorage.InitDataStorage();
             ExtentTestManager.CreateParentTest(TestContext.CurrentContext.Test.ClassName);
         }
 
         [OneTimeTearDown]
         public void TearDown()
         {
+            DataStorage.DataStorage.ClearAllData();
             DriverManager.QuitDriver();
             ExtentReportManager.Instance.Flush();
         }
@@ -53,23 +47,19 @@ namespace UnsplashTest.TestCase
         [TearDown]
         public void AfterTest()
         {
-            DataStorage.DataStorage.ClearAccountData();
+            DataStorage.DataStorage.ClearAllData();
             UpdateTestStatus();
             DriverManager.QuitDriver();
         }
 
-        private void SetUpAccountData()
+        private static void SetUpBrowser()
         {
-            var objAccount = Application.GetConfig()["Application"];
-            var accounts = JsonConvert.DeserializeObject<List<AccountModel>>(objAccount);
-            
-            foreach(var account in accounts)
-            {
-                DataStorage.DataStorage.AddAccountData(account.Key, account);
-            }
+            var selectBrowser = Application.GetConfig()["SetUpBrowser"];
+            var driver = ApplicationHelper.GetDriverConfigs().Find(x => x.BrowserName.Equals(selectBrowser, StringComparison.OrdinalIgnoreCase));
+            DriverManager.InitDriverProvider(driver);
         }
 
-        public static void UpdateTestStatus()
+        private static void UpdateTestStatus()
         {
             var status = TestContext.CurrentContext.Result.Outcome.Status;
             var stacktrace = string.IsNullOrEmpty(TestContext.CurrentContext.Result.StackTrace) ? "" : string.Format("{0}", TestContext.CurrentContext.Result.StackTrace);

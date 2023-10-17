@@ -12,8 +12,10 @@ namespace ProjectCore.Drivers
 
         public WebDriver CreateDriver(DriverConfig driverConfig)
         {
-            var edgeOption = new EdgeOptions();
-            var driver = new EdgeDriver(edgeOption);
+            var options = new EdgeOptions();
+            options.BinaryLocation = $"{driverConfig.BinaryLocation}";
+            options.AddAdditionalOption("BrowserVersion", driverConfig.Version);
+            var driver = new EdgeDriver(options);
 
             return driver;
         }

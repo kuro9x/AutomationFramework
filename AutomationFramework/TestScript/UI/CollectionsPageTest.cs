@@ -1,48 +1,62 @@
 ﻿using AppService.Models;
-using AppService.Services;
 using NUnit.Framework;
-using ProjectCore.Configurations;
-using UnsplashTest.Models;
+using ProjectCore.Reports.ExtentReport;
 using UnsplashTest.TestCase;
+using UnsplashTest.UI.Pages;
 
 namespace UnsplashTest.UI
 {
+    [TestFixture]
     public class CollectionsPageTest : TestBase
     {
-        private static object[] _sourceLists =
+        [TestCase("Account1")]
+        public async Task DeleteCollection_Should_Success(string accountKey)
         {
-            new CollectionRequestModel
-            {
-                Title = "Title_1",
-                Description = "Description_1",
-                Private = true
-            }
-        };
 
-        [TestCaseSource(nameof(_sourceLists))]
-        public async Task DeleteCollection_Should_Success(CollectionRequestModel collectionRequest)
-        {
-            // 1. Prepare Collection
-            CollectionService collectionService = new CollectionService(new ApiClient(new RestSharp.RestClient()));
-            var resultAddCollection = await collectionService.AddCollection(collectionRequest);
+            ExtentTestManager.GetTest().Info("1. Prepare Add new Collection");
+            var collection = DataStorage.DataStorage.GetCollections().FirstOrDefault();
+            var accessToken = DataStorage.DataStorage.GetAccountInfo(accountKey).AccessToken;
+            var resultAddCollection = await collectionService.AddCollection(new CollectionRequestModel
+                                        {
+                                            Title = collection.Title,
+                                            Description = collection.Description,
+                                            Private = collection.Private
+                                        }, accessToken);
 
-            // 2. Login
-            homePage.GoToUrl($"{Application.GetConfig()["Application:BaseUrl"]}login");
-            AccountModel account = new AccountModel
-            {
-                Email = Application.GetConfig()["Application:Account:Email"],
-                Password = Application.GetConfig()["Application:Account:Password"]
-            };
+            collection.Id = resultAddCollection.Id;
 
-            loginPage.Login(account);
-            // 3. Go to collection tab
-            collectionsPage.GoToCollectionsTab();
-            // 4. Process delete collection
+            ExtentTestManager.GetTest().Info("2. Login");
+            LoginPage loginPage = homePage.GoToLoginPage();
+            loginPage.ProcessLogin(accountKey);
+
+            ExtentTestManager.GetTest().Info("3. Go to collection tab");
+            CollectionsPage collectionsPage = homePage.GoToCollectionsTab();
+
+            ExtentTestManager.GetTest().Info("4. Process delete collection");
             collectionsPage.ProcessDeleteCollection(resultAddCollection.Id);
-            // 5. Verify data
+
+            ExtentTestManager.GetTest().Info("5. Verify data");
             var expectData = collectionsPage.VerifyDeleteCollectionProcess(resultAddCollection);
 
             Assert.IsTrue(expectData);
+        }
+
+        [SetUp]
+        public void BeforeLikesPageTest()
+        {
+            var collections = DataStorage.DataStorage.GetListCollectionTestConfig();
+            DataStorage.DataStorage.ProcessAddCollectionData(collections.ToList());
+            var listAccount = DataStorage.DataStorage.GetListAccountTestConfig();
+            DataStorage.DataStorage.ProcessAddAccountData(listAccount.Take(1).ToList());
+        }
+
+        [TearDown]
+        public async Task AfterLikesPageTest()
+        {
+            var collections = DataStorage.DataStorage.GetCollections();
+            var accessToken = DataStorage.DataStorage.GetAccounts().FirstOrDefault().AccessToken;
+            await collectionService.DeleteCollections(collections.Select(x => x.Id).ToList(), accessToken);
+            DataStorage.DataStorage.ClearDataByType("Collection");
         }
     }
 }

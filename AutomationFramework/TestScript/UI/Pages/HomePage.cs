@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using ProjectCore.Configurations;
 using ProjectCore.WebElement;
 using UnsplashTest.Constant;
 using UnsplashTest.UI.Pages;
@@ -7,19 +8,39 @@ namespace UnsplashTest.Pages
 {
     public class HomePage : BasePage
     {
-        private readonly Element showLoggedinMenu = new Element(By.Id("popover-avatar-loggedin-menu"));
-        private readonly Element viewProfileButton = new Element(By.XPath($"//a[text()='View profile']"));
-        private readonly Element buttonInDialog = new Element(By.XPath($"//div[@role='dialog']//button"));
+        protected readonly Element showLoggedinMenu = new Element(By.Id("popover-avatar-loggedin-menu"));
+        protected readonly Element buttonInDialog = new Element(By.XPath($"//div[@role='dialog']//button"));
 
-        public void ProcessUnlikePhotos(List<string> likedPhotos)
+        public LoginPage GoToLoginPage()
         {
-            foreach (var photoName in likedPhotos)
-            {
-                ElementByPhotoName(photoName).Click();
-                ElementPhotoActionButton(ActionButton.Like).Click();
-                Thread.Sleep(1000);
-                CloseDialogPhoto();
-            }
+            GoToUrl($"{Application.GetConfig()["Application:BaseUrl"]}login");
+            return new LoginPage();
+        }
+
+        public void GoToViewProfile()
+        {
+            ShowLoggedinMenu();
+            GetViewProfileElement("View profile").Click();
+        }
+
+        public LikesPage GoToLikedTab()
+        {
+            GoToViewProfile();
+            NavToProfileTabByType(ProfileTabType.TabLike).Click();
+            return new LikesPage();
+        }
+
+        public CollectionsPage GoToCollectionsTab()
+        {
+            GoToViewProfile();
+            NavToProfileTabByType(ProfileTabType.TabCollections).Click();
+            return new CollectionsPage();
+        }
+
+
+        protected Element NavToProfileTabByType(string type)
+        {
+            return new Element(By.XPath($"//a[@data-test='{type}']"));
         }
 
         protected Element ElementByPhotoName(string photoName)
@@ -37,9 +58,9 @@ namespace UnsplashTest.Pages
             buttonInDialog.FindElementsSafe()?.FirstOrDefault()?.Click();
         }
 
-        public void ViewProfile()
+        public Element GetViewProfileElement(string text)
         {
-            viewProfileButton.Click();
+            return new Element(By.XPath($"//a[text()='{text}']"));
         }
 
         public void ShowLoggedinMenu()

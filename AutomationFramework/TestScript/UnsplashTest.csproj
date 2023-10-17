@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppService\AppService.csproj" />
+    <ProjectReference Include="..\AppService\UnslashService.csproj" />
     <ProjectReference Include="..\AutomationFramework\ProjectCore.csproj" />
   </ItemGroup>
 

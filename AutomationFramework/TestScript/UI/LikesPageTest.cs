@@ -1,42 +1,51 @@
-﻿using AppService.Services;
-using NUnit.Framework;
-using ProjectCore.Configurations;
+﻿using NUnit.Framework;
 using ProjectCore.Reports.ExtentReport;
-using UnsplashTest.Models;
 using UnsplashTest.TestCase;
+using UnsplashTest.UI.Pages;
 
 namespace UnsplashTest.UI
 {
+    [TestFixture]
     public class LikesPageTest : TestBase
     {
-        [TestCase("Account1", 5)]
-        public async Task UnlikePhoto_Should_Success(string accountKey, int numberOfPhoto)
+        [TestCase("Account1")]
+        public async Task UnlikePhoto_Should_Success(string accountKey)
         {
-            PhotoService photoService = new PhotoService(new ApiClient(new RestSharp.RestClient()));
-            ExtentTestManager.GetTest().Info("1. Prepare data - like 5 photo lastest");
-            var photos = await photoService.GetPhotosLatest(1, numberOfPhoto);
-            var responseLikePhoto = await photoService.LikePhotos(photos.Select(x => x.Id).ToList());
+            ExtentTestManager.GetTest().Info($"1. Prepare data - like photo lastest");
+            var photos = DataStorage.DataStorage.GetPhotos();
+            var accessToken = DataStorage.DataStorage.GetAccounts().FirstOrDefault().AccessToken;
+            await photoService.LikePhotos(photos.Select(x => x.Id).ToList(), accessToken);
 
             ExtentTestManager.GetTest().Info("2. Login");
-
-
-            homePage.GoToUrl($"{Application.GetConfig()["Application:BaseUrl"]}login");
-            AccountModel account = new AccountModel
-            {
-                Email = Application.GetConfig()["Application:Account:Email"],
-                Password = Application.GetConfig()["Application:Account:Password"]
-            };
-
-            loginPage.Login(account);
+            LoginPage loginPage = homePage.GoToLoginPage();
+            loginPage.ProcessLogin(accountKey);
 
             ExtentTestManager.GetTest().Info("3. GoTolikesTab");
-            likesPage.GoTolikedTab();
+            LikesPage likesPage = homePage.GoToLikedTab();
 
             ExtentTestManager.GetTest().Info("4. ProcessUnlikePhotos");
-            homePage.ProcessUnlikePhotos(photos.Select(x => x.Slug).ToList());
+            likesPage.ProcessUnlikePhotos(photos.Select(x => x.Slug).ToList());
 
             ExtentTestManager.GetTest().Info("5. Verify data");
             Assert.IsTrue(likesPage.VerifyUnlikeProcess(photos.Select(x => x.Slug).ToList()));
+        }
+
+        [SetUp]
+        public void BeforeLikesPageTest()
+        {
+            var photos = DataStorage.DataStorage.GetListPhotoTestConfig();
+            DataStorage.DataStorage.ProcessAddPhotoData(photos.Take(2).ToList());
+            var listAccount = DataStorage.DataStorage.GetListAccountTestConfig();
+            DataStorage.DataStorage.ProcessAddAccountData(listAccount.Take(1).ToList());
+        }
+
+        [TearDown]
+        public async Task AfterLikesPageTest()
+        {
+            var photoIds = DataStorage.DataStorage.GetPhotos();
+            var accessToken = DataStorage.DataStorage.GetAccounts().FirstOrDefault().AccessToken;
+            await photoService.UnLikePhotos(photoIds.Select(x => x.Id).ToList(), accessToken);
+            DataStorage.DataStorage.ClearDataByType("Photo");
         }
     }
 }

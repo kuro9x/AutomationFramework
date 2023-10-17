@@ -22,7 +22,7 @@ namespace ProjectCore.Reports.ExtentReport
 
             var htmlReporter = new ExtentHtmlReporter($"{reportPath}\\index.html");
             htmlReporter.LoadConfig(projectPath + @"\ExtentReportConfig.xml");
-            Instance.AttachReporter();
+            Instance.AttachReporter(htmlReporter);
         }
     }
 }

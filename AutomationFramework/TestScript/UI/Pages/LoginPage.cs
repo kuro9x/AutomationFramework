@@ -1,6 +1,5 @@
 ﻿using OpenQA.Selenium;
 using ProjectCore.WebElement;
-using UnsplashTest.Models;
 using UnsplashTest.Pages;
 
 namespace UnsplashTest.UI.Pages
@@ -9,14 +8,28 @@ namespace UnsplashTest.UI.Pages
     {
         private Element userNameTextBox = new Element(By.Id("user_email"));
         private Element userPasswordTextBox = new Element(By.Id("user_password"));
-        private Element loginButton = new Element(By.XPath("//input[@value='Login']"));
 
-        public void Login(AccountModel account)
+        public bool ProcessLogin(string accountKey)
         {
-            userNameTextBox.SendKeys(account.Email);
-            userPasswordTextBox.SendKeys(account.Password);
+            try
+            {
+                var account = DataStorage.DataStorage.GetAccountInfo(accountKey);
+                if (account == null)
+                {
+                    return false;
+                }
 
-            loginButton.Click();
+                userNameTextBox.SendKeys(account.Email);
+                userPasswordTextBox.SendKeys(account.Password);
+
+                GetInputElementByText("Login").Click(); // change Edit => dynamic language
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
     }
 }

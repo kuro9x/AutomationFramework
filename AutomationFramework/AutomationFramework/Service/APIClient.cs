@@ -4,7 +4,7 @@ using RestSharp.Authenticators;
 using RestSharp.Authenticators.OAuth2;
 using Newtonsoft.Json;
 
-namespace AppService.Services
+namespace ProjectCore.Service
 {
     public class ApiClient
     {
